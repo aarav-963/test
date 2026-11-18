@@ -20,14 +20,16 @@ authorization are added.
 ## Deploy on Render
 
 The included `render.yaml` configures a Python web service with Gunicorn and a
-`/healthz` health check. Push this folder to a Git repository, create a new
+`/healthz` health check. Gunicorn reads Render's `PORT` in
+`gunicorn.conf.py` and binds to `0.0.0.0`. Push this folder to a Git repository, create a new
 Blueprint in Render connected to that repository, and provide `SUPABASE_URL`
 and `SUPABASE_PUBLISHABLE_KEY` when Render prompts for the unsynced values.
-Render then installs `requirements.txt` and starts `gunicorn app:app`.
+Render then installs `requirements.txt` and starts
+`gunicorn app:app --config gunicorn.conf.py`.
 
 For an existing Render Web Service, use build command
 `pip install -r requirements.txt` and start command
-`gunicorn app:app --bind 0.0.0.0:$PORT`. Add `SUPABASE_URL` and
+`gunicorn app:app --config gunicorn.conf.py`. Add `SUPABASE_URL` and
 `SUPABASE_PUBLISHABLE_KEY` in the service's Environment settings.
 
 The database schema creates the diagram's three tables, foreign keys, and
