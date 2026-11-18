@@ -14,7 +14,7 @@ const palettes = [
   ['#c37b34', '#412b27', '✦'], ['#3474b4', '#142c54', '◈'], ['#b44f68', '#421b3a', '✷']
 ];
 const get = async (url) => { const r = await fetch(`${API}${url}`); const body = await r.json().catch(() => ({})); if (!r.ok) throw new Error(body.error || `Request failed (${r.status})`); return body; };
-const post = async (url, data) => { const r = await fetch(`${API}${url}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); const body = await r.json().catch(() => ({})); if (!r.ok) throw new Error(body.error || `Request failed (${r.status})`); return body; };
+const post = async (url, data) => { const r = await fetch(`${API}${url}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); const body = await r.json().catch(() => ({})); if (!r.ok) { const message = r.status >= 500 ? 'The API could not save this registration. Its database registration function or permissions need attention; check the backend logs.' : body.error || `Request failed (${r.status})`; throw new Error(message); } return body; };
 const cleanTitle = (title = '') => title.replace(/^Demo:\s*/i, '');
 const prettyCategory = title => { const t = title.toLowerCase(); if (/ai|machine learning|robot|vision|generative/.test(t)) return 'AI & Robotics'; if (/design|ui|ux/.test(t)) return 'Design & UI'; if (/cloud|aws|serverless|kubernetes/.test(t)) return 'Cloud & Infrastructure'; if (/security|cyber/.test(t)) return 'Cybersecurity'; if (/business|product|career/.test(t)) return 'Business & Careers'; if (/data|sql|database/.test(t)) return 'Data & Analytics'; return 'Engineering & Code'; };
 
