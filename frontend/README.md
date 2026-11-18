@@ -8,7 +8,7 @@ React frontend for campus event discovery and registration. The UI reads and wri
 2. Keep the framework preset as **Vite**. The included `vercel.json` sets the build command to `npm run build` and the output directory to `dist`.
 3. Deploy. No environment variables are required.
 
-The `api/[...path].js` serverless function proxies `/api/*` requests to the deployed API and adds CORS response headers. To use a different backend, set `API_ORIGIN` in Vercel's project environment variables, then redeploy.
+The included Vercel rewrite forwards `/api/*` paths and query strings to the deployed API. Vercel adds CORS response headers for those routes. If the backend URL changes, update the rewrite destination in `vercel.json` and redeploy.
 
 ## Run locally
 
