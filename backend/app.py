@@ -169,4 +169,6 @@ def method_not_allowed(_error):
 
 
 if __name__ == "__main__":
-    app.run(debug=os.environ.get("FLASK_DEBUG", "false").lower() == "true")
+    # Keep `python app.py` production-safe too (some Render services use this
+    # dashboard start command instead of the startCommand in render.yaml).
+    os.execvp("gunicorn", ["gunicorn", "app:app", "--config", "gunicorn.conf.py"])
