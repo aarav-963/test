@@ -38,6 +38,12 @@ function so duplicate and capacity checks happen atomically. It returns `409`
 for an existing registration or a full event. The function is the only anon
 write path to registrations; direct inserts are not granted.
 
+If reads work but `POST /api/registrations` returns a database error, run
+`migrations/001_event_registration_rpc.sql` in the Supabase SQL Editor. It
+creates or repairs the registration RPC, grants execute permission to `anon`,
+and reloads the PostgREST schema cache. Then redeploy the Render service so
+setup errors are reported clearly.
+
 ## Endpoints
 
 | Method | Endpoint | Behavior |

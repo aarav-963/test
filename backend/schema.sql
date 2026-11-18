@@ -107,3 +107,6 @@ grant select on public.registrations to anon;
 revoke insert on public.registrations from anon;
 revoke all on function public.create_event_registration(uuid, uuid) from public;
 grant execute on function public.create_event_registration(uuid, uuid) to anon;
+
+-- Refresh PostgREST's function schema cache after applying this file.
+notify pgrst, 'reload schema';

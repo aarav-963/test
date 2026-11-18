@@ -36,6 +36,9 @@ def valid_uuid(value):
 def database_error(error: APIError):
     """Translate known registration RPC errors; hide internal database details."""
     message = str(getattr(error, "message", ""))
+    code = str(getattr(error, "code", ""))
+    details = str(getattr(error, "details", ""))
+    diagnostic = " ".join((message, details, code)).lower()
     if "registration_duplicate" in message:
         return json_error("User is already registered for this event", 409)
     if "event_full" in message:
@@ -44,6 +47,12 @@ def database_error(error: APIError):
         return json_error("Event not found", 404)
     if "user_not_found" in message:
         return json_error("User not found", 404)
+    if code == "PGRST202" or "create_event_registration" in diagnostic or "permission denied for function" in diagnostic:
+        app.logger.exception("Registration RPC is missing or unavailable: %s", diagnostic)
+        return json_error(
+            "Registration database setup is incomplete. Apply migrations/001_event_registration_rpc.sql in Supabase and grant EXECUTE to anon.",
+            503,
+        )
     app.logger.exception("Supabase request failed: %s", message)
     return json_error("Database request failed", 500)
 
